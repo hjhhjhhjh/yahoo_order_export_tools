@@ -1,0 +1,3 @@
+if( document.domain.match( new RegExp("(store.yahoo.co.jp)$","i") ) ){document.write("<!-- SpaceID=2080317044 loc=EMG2 noad-spid -->\n");
+document.write("");
+}
