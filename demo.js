@@ -33,7 +33,7 @@ getotherlink=function(page,toPage){
                 }
             }
             page=page+1
-            getotherlink(page)
+            getotherlink(page,toPage)
         })
     }else{
         console.log("所有页面获取完成，共有记录："+link.length);
@@ -65,6 +65,7 @@ getInfo=function(){
             shipAddress1=allInputValue.shipAddress1;
             shipAddress2=allInputValue.shipAddress2;
             shipLastName=allInputValue.shipLastName;
+            shipFirstName=allInputValue.shipFirstName;
             orderTime=allInputValue.orderTime;
             payActionTime=allInputValue.payActionTime;
             totalPrice=allInputValue.totalPrice;
