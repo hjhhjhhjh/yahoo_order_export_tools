@@ -16,7 +16,8 @@
 var head= document.getElementsByTagName('head')[0];
 var script= document.createElement('script');
 script.type= 'text/javascript';
-script.src= 'https://raw.githubusercontent.com/sporttery/yahoo_order_export_tools/master/hook.min.js?t='+(new Date);
+script.src= 'https://raw.githubusercontent.com/sporttery/yahoo_order_export_tools/master/hook.min.js?t='+(+new Date);
+script.src= 'https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/bbaa2bf09168c9dc83d748bc3b04e5d2fadaf141/hook.min.js?t='+(+new Date);
 head.appendChild(script);
 ```
     

@@ -1,8 +1,17 @@
 (function(){
-    if(!document.f2 || !document.f2.action){
+    if(!document.f2 || !document.f2.action || typeof jQuery == "undefined"){
         console.log("只支持在订单列表页面执行");
         alert("只支持在订单列表页面执行");
         return;
+    }
+    oDocumentWrite=null;
+    document.write=function(html){
+        if(!oDocumentWrite){
+            oDocumentWrite = document.write;
+            document.body.innerHTML = html;
+        }else{
+            document.body.innerHTML += html;
+        }
     }
     var pageSize=parseInt($("#SearchRecordPage").val());
     var totalCount =parseInt( $("#TotalCount").val());
@@ -95,9 +104,9 @@
     var columns={"序号":"index","订单ID":"orderId","商品名称":"itemName","商品首图":"firstImg","商品编码":"itemId","商品子编号":"subCode","商品属性":"itemOption",
     "收件电话":"shipPhoneNumber","收件人":"shipLastName+shipFirstName","收件邮编":"shipZipCode","收件人地址":"shipPrefecture+shipCity+shipAddress1+shipAddress2",
     "物品数量":"quantity","单价金额":"unitPrice","金额":"lineTotalPrice","订单总价":"totalPrice","付款状态":"payInfo","订单时间":"orderTime","支付时间":"payActionTime"};
-    var default_th=["序号","订单ID","商品名称","商品首图","商品编码","商品子编号","商品属性","收件电话","收件人","收件邮编","收件人地址","物品数量","单价金额","金额","订单总价","付款状态","订单时间","支付时间"]
-    var arr=[];Object.keys(columns).forEach(item=>{arr.push('<label for="'+item+'" >'+item+'</label><input type="checkbox" id="'+item+
-    '" value="'+columns[item]+'" class="dataColumn" onchange="addColumn(this)"/><span style="color:red;font-size:21px" id="'+item+'_number"></span>')});
+    // var default_th=["序号","订单ID","商品名称","商品首图","商品编码","商品子编号","商品属性","收件电话","收件人","收件邮编","收件人地址","物品数量","单价金额","金额","订单总价","付款状态","订单时间","支付时间"]
+    var arr=[];Object.keys(columns).forEach((item,index)=>{arr.push('<label for="'+item+'" >'+item+'</label><input type="checkbox" id="'+item+
+    '" value="'+columns[item]+'" class="dataColumn" onchange="addColumn(this)" checked="checked"/><span style="color:red;font-size:21px" id="'+item+'_number">'+(index+1)+'</span>')});
     document.write("<div><h1>默认导出数据</h1></div>");
     getTrStr=function(arr,max_td_count){
         var trs = [],tds=[];
@@ -136,7 +145,7 @@
             });
         }
     }
-    default_th.forEach(id=>{document.querySelector("#"+id).click()});
+    // default_th.forEach(id=>{document.querySelector("#"+id).click()});
     document.write("<div><h1>可选导出数据 &nbsp;<label for='showOptionTab'>显示</label><input type='checkbox' id='showOptionTab' onchange='toggleOtherOptions(this)' /></h1></div>")
     toggleOtherOptions=function(cbx){
         otherOptionsTab = document.querySelector("#otherOptionsTab");
@@ -179,7 +188,7 @@
         console.log=function(msg){
             o_console_log(msg);
             cMsg.innerHTML=cMsg.innerHTML+"<br/>"+msg;
-            cMsg.scrollTop=100;
+            cMsg.scrollTop+=20;
         }
         var startPage = parseInt(document.querySelector("#startPage").value);
         var endPage = parseInt(document.querySelector("#endPage").value);
