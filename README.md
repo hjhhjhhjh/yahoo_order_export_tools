@@ -10,8 +10,8 @@
     勾选数据列，可以选择是否导出，勾选的顺序，决定数据列的顺序 （红色字体标出）
     可选数据列，因为数据列太多，默认不显示
     点生成数据，如果成功，将出现下载按键，可直接下载到Excel里。
-    
-### 或者直接复制下面代码在控制台里粘贴，回车
+
+### 或者直接复制下面代码在控制台里粘贴，回车 (此方法行不通)
 ``` javascript
 var head= document.getElementsByTagName('head')[0];
 var script= document.createElement('script');

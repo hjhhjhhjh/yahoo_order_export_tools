@@ -168,17 +168,18 @@
     exportOption += "<tr><td style='text-align:center'><a href='javascript:showData()' style='font-size:50px;color:red;font-weight:bold;cursor:pointer' >生成数据</a>"+
     "&nbsp;&nbsp;<a href='javascript:location.reload()' style='font-size:20px;color:#000;font-weight:bold;cursor:pointer' >退出</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
     "<a href='javascript:save2Excel()' id='downloadFile' style='font-size:50px;font-weight:bold;cursor:pointer;display:none;' >下载表格</a></td></tr>";
-    exportOption += "<tr style='display:none'><td id='cMsg' style='text-align:left;color:red'>&nbsp;</td></tr>";
+    exportOption += "<tr style='display:none'><td><div id=\"cMsg\" style=\"text-align:left;color:red;height:100px;width:100%;overflow-y:scroll\"></div></td></tr>";
     document.write("<table class=gridtable>"+exportOption+"</table><br/>");
     
     showData=function(action){
         o_console_log = console.log;
         cMsg = $("#cMsg");
-        cMsg.parent().show();
-
+        cMsg.parents("tr").show();
+        cMsg = cMsg[0];
         console.log=function(msg){
             o_console_log(msg);
-            cMsg.text(msg);
+            cMsg.innerHTML=cMsg.innerHTML+"<br/>"+msg;
+            cMsg.scrollTop=100;
         }
         var startPage = parseInt(document.querySelector("#startPage").value);
         var endPage = parseInt(document.querySelector("#endPage").value);
@@ -204,23 +205,24 @@
         var list=[];
         // data.sort(sortByPayTime);
         var onlyPay = $("#onlyPay")[0].checked;
-        var payTimeAfter = $("#payTimeAfterDate").val() +" "+ $("payTimeAfterTime").val();
+        var payTimeAfter = $("#payTimeAfterDate").val() +" "+ $("#payTimeAfterTime").val();
         if(payTimeAfter.length<5){
             payTimeAfter=false;
         }
-        
         data.forEach((obj,objIndex)=>{
-            arrKey = [];
-            itemCount = obj.itemCount;
+            arrKey = {};
+            itemCount = parseInt(obj.itemCount);
+            obj.itemCount = itemCount;
             Object.keys(obj).forEach((key)=>{
                 oKey = key.replace(/\d+$/,"");
-                if(obj.hasOwnProperty(oKey+itemCount)){
-                    arrKey.push(oKey);
+                if(obj.hasOwnProperty(oKey+itemCount) && !arrKey[oKey]){
+                    arrKey[oKey]=oKey;
                 }
             });
-            arrKey.forEach((key)=>{
+            
+            Object.keys(arrKey).forEach((key)=>{
                 obj[key]=[];
-                for(var i=1;i<=itemCount.length;i++){
+                for(var i=1;i<=itemCount;i++){
                     obj[key].push(obj[key+""+i]);
                 }
             })
@@ -228,16 +230,15 @@
             shopName = obj.orderId.split("-")[0];
             obj.itemName=[];
             obj.firstImg=[];
-            obj.index=objIndex+1;
             
-            for(var i=1;i<=itemCount.length;i++){
+            
+            for(var i=1;i<=itemCount;i++){
                 obj.firstImg.push("<img src=\"https://item-shopping.c.yimg.jp/i/d/"+shopName+"_"+obj["itemId"+i]+"\" width=106 height=106 />");
                 obj.itemName.push("<a href=\"https://store.shopping.yahoo.co.jp/"+shopName+"/"+obj["itemId"+i]+".html\" target=\"_blank\">"+obj["title"+i]+"</a>");
             }
            
         });
         data.forEach((obj,objIndex)=>{
-            itemCount = obj.itemCount;
             payActionTime = obj.payActionTime;
             if(onlyPay && payActionTime == ""){
                 return true;
@@ -247,7 +248,15 @@
             }
             arr = [];
             arrIndex=[];
-            
+            listLength=list.length;
+            if(obj.itemCount > 1) {
+                obj.index=[];
+                for(var i=1;i<=obj.itemCount;i++){
+                    obj.index.push(listLength+i);
+                }
+            }else{
+                obj.index=listLength+1;
+            }
             for(var key in dataKeys){
                 if(key.indexOf("+")!=-1){
                     keyArr = key.split("+");
@@ -275,26 +284,27 @@
             if(arrIndex.length>0){
                 arrLen = arrIndex[0].values.length;
                 for(var i=0;i<arrLen;i++){
+                    var arr2 = arr.concat();
                     arrIndex.forEach(v=>{
                         if(v.key=="itemOption"){
                             itemOptions = v.values[i].split("�");
                             if(itemOptions.length>1){
-                                arr[v.index] = "";
+                                arr2[v.index] = "";
                                 itemOptions.forEach((n,ni)=>{
                                     if(ni%2==0){
-                                        arr[v.index] += n + ":";
+                                        arr2[v.index] += n + ":";
                                     }else{
-                                        arr[v.index] += n + "<br/>";
+                                        arr2[v.index] += n + "<br/>";
                                     }
                                 })
                             }else{
-                                arr[v.index]=v.values[i];
+                                arr2[v.index]=v.values[i];
                             }
                         }else{
-                            arr[v.index]=v.values[i];
+                            arr2[v.index]=v.values[i];
                         }
                     })
-                    list.push(arr);
+                    list.push(arr2);
                 }
             }else{
                 list.push(arr);
