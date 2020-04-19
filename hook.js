@@ -305,7 +305,7 @@
         if(orderTable){
             orderTable.innerHTML = trs.join("");
         }else{
-            document.write("<table class=gridtable id=\"orderTable\">"+trs.join("")+"</table>");
+            document.write("<table class=gridtable id=\"orderTable\" style='width:100%'>"+trs.join("")+"</table>");
         }
         if(trs.length>1){
             $("#downloadFile").show();
