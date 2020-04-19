@@ -188,7 +188,7 @@
         console.log=function(msg){
             o_console_log(msg);
             cMsg.innerHTML=cMsg.innerHTML+"<br/>"+msg;
-            cMsg.scrollTop+=20;
+            cMsg.scrollTop = cMsg.scrollHeight;
         }
         var startPage = parseInt(document.querySelector("#startPage").value);
         var endPage = parseInt(document.querySelector("#endPage").value);
@@ -204,11 +204,12 @@
         $.ajaxSetup({async:true});
 
         var allCheckedInputs = document.querySelectorAll(".dataColumn:checked");
-        var dataKeys = {};
+        var dataKeys = [];
         var ths = [];
         allCheckedInputs.forEach(input=>{
-            dataKeys[input.value]=input.value;
-            ths.push(input.id);
+            var index = parseInt($(input).next().text())-1;
+            dataKeys[index]=input.value;
+            ths[index]=input.id;
         });
         var tableTH = "<tr><th>" + ths.join("</th><th>")+"</th></tr>";
         var list=[];
@@ -266,7 +267,7 @@
             }else{
                 obj.index=listLength+1;
             }
-            for(var key in dataKeys){
+            dataKeys.forEach(key=>{
                 if(key.indexOf("+")!=-1){
                     keyArr = key.split("+");
                     values=[];
@@ -289,7 +290,7 @@
                         arr.push(value);
                     }
                 }
-            }
+            });
             if(arrIndex.length>0){
                 arrLen = arrIndex[0].values.length;
                 for(var i=0;i<arrLen;i++){
@@ -328,16 +329,30 @@
         if(orderTable){
             orderTable.innerHTML = trs.join("");
         }else{
-            document.write("<table class=gridtable id=\"orderTable\" style='width:100%'>"+trs.join("")+"</table>");
+            document.write("<table class=gridtable id=\"orderTable\" style='width:100%'>"+trs.join("")+"</table><br/><br/>");
+            orderTable = document.querySelector("#orderTable");
         }
         if(trs.length>1){
             $("#downloadFile").show();
+            cMsg.scrollTop = cMsg.scrollHeight;
         }
 
-        console.log = o_console_log;
     }
 
     save2Excel=function(){
+        var orderTable = $("#orderTable");
+        var imgIdx = -1;
+        orderTable.find("tr:eq(1)").find("td").each((idx,td)=>{
+            if($(td).find("img").length==1){
+                imgIdx = idx;
+                return false;
+            }
+        });
+        if(imgIdx!=-1){//有图片显示，需要增加那一列的宽和高
+            orderTable.find("th:eq("+imgIdx+")").width("165px");
+            orderTable.find("tr:gt(0)").height("165px");
+        }
+        
         var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>"; 
         excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">'; 
         excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel'; 
@@ -361,9 +376,15 @@
         excelFile += "<![endif]-->"; 
         excelFile += "</head>"; 
         excelFile += "<body>"; 
-        excelFile += document.querySelector("#orderTable").outerHTML; 
+        excelFile += orderTable[0].outerHTML; 
         excelFile += "</body>"; 
         excelFile += "</html>"; 
+
+        if(imgIdx!=-1){//有图片显示，需要增加那一列的宽和高
+            orderTable.find("th:eq("+imgIdx+")").width("");
+            orderTable.find("tr:gt(0)").height("");
+        }
+
         var now = new Date();
         var date = now.getDate();
         var month = now.getMonth()+1;
@@ -373,6 +394,8 @@
         var FileName = now.getFullYear()+""+(month<10?"0"+month:month)+""+(date<10?"0"+date:date)+""+hour+""+minute+""+second;
             
         var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile); 
+        
+
             
         var link = document.createElement("a");   
         link.href = uri; 
