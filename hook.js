@@ -177,7 +177,7 @@
         cMsg.parent().show();
 
         console.log=function(msg){
-            o_console_log(mgs);
+            o_console_log(msg);
             cMsg.text(msg);
         }
         var startPage = parseInt(document.querySelector("#startPage").value);
