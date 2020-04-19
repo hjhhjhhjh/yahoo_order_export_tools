@@ -17,10 +17,10 @@
 var head= document.getElementsByTagName('head')[0];
 var script= document.createElement('script');
 script.type= 'text/javascript';
-script.src= 'https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/8bb7b0c9f1cbcf03f4b8725281a3eb352f95350d/hook.min.js?t='+(+new Date);
+script.src= 'https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/5a4e21f9d643ddfef38ecb3c963fb7ed30aed3b0/hook.min.js?t='+(+new Date);
 head.appendChild(script);
 //使用jQuery
-$.getScript('https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/8bb7b0c9f1cbcf03f4b8725281a3eb352f95350d/hook.min.js');
+$.getScript('https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/5a4e21f9d643ddfef38ecb3c963fb7ed30aed3b0/hook.min.js');
 ```
     
 ### 后面有时间再写一个浏览器插件
