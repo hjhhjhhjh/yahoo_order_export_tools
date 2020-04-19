@@ -341,7 +341,7 @@
             $("#downloadFile").show();
             cMsg.scrollTop = cMsg.scrollHeight;
         }
-
+        console.log = o_console_log ;
     }
 
     save2Excel=function(){
