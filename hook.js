@@ -67,9 +67,7 @@
                 
                 data.push(allInputValue);
                 console.log(allInputValue.orderId+" 有 "+allInputValue.itemCount + " 个商品,信息获取完成 ");
-                if(!addr){
-                    getInfo();
-                }
+                getInfo();
             });
         }else{
             console.log("没有更多订单了");
@@ -179,6 +177,7 @@
         cMsg.parent().show();
 
         console.log=function(msg){
+            o_console_log(mgs);
             cMsg.text(msg);
         }
         var startPage = parseInt(document.querySelector("#startPage").value);
