@@ -11,5 +11,14 @@
     可选数据列，因为数据列太多，默认不显示
     点生成数据，如果成功，将出现下载按键，可直接下载到Excel里。
     
+### 或者直接复制下面代码在控制台里粘贴，回车
+``` javascript
+var head= document.getElementsByTagName('head')[0];
+var script= document.createElement('script');
+script.type= 'text/javascript';
+script.src= 'https://raw.githubusercontent.com/sporttery/yahoo_order_export_tools/master/hook.min.js?t='+(new Date);
+head.appendChild(script);
+```
+    
 ### 后面有时间再写一个浏览器插件
     谢谢！
