@@ -296,20 +296,25 @@
                 for(var i=0;i<arrLen;i++){
                     var arr2 = arr.concat();
                     arrIndex.forEach(v=>{
+                        // if(v.key=="itemOption"){
+                        //     itemOptions = v.values[i].split("�");
+                        //     if(itemOptions.length>1){
+                        //         arr2[v.index] = "";
+                        //         itemOptions.forEach((n,ni)=>{
+                        //             if(ni%2==0){
+                        //                 arr2[v.index] += n + ":";
+                        //             }else{
+                        //                 arr2[v.index] += n + "<br/>";
+                        //             }
+                        //         })
+                        //     }else{
+                        //         arr2[v.index]=v.values[i];
+                        //     }
+                        // }else{
+                        //     arr2[v.index]=v.values[i];
+                        // }
                         if(v.key=="itemOption"){
-                            itemOptions = v.values[i].split("�");
-                            if(itemOptions.length>1){
-                                arr2[v.index] = "";
-                                itemOptions.forEach((n,ni)=>{
-                                    if(ni%2==0){
-                                        arr2[v.index] += n + ":";
-                                    }else{
-                                        arr2[v.index] += n + "<br/>";
-                                    }
-                                })
-                            }else{
-                                arr2[v.index]=v.values[i];
-                            }
+                            arr2[v.index]=v.values[i].replace(/�/g," ");
                         }else{
                             arr2[v.index]=v.values[i];
                         }
@@ -340,17 +345,21 @@
     }
 
     save2Excel=function(){
+        isMac = navigator.userAgent.toLowerCase().indexOf("mac") !=-1;
+        isWindows = navigator.userAgent.toLowerCase().indexOf("windows") !=-1;
         var orderTable = $("#orderTable");
         var imgIdx = -1;
-        orderTable.find("tr:eq(1)").find("td").each((idx,td)=>{
-            if($(td).find("img").length==1){
-                imgIdx = idx;
-                return false;
+        if(isMac){
+            orderTable.find("tr:eq(1)").find("td").each((idx,td)=>{
+                if($(td).find("img").length==1){
+                    imgIdx = idx;
+                    return false;
+                }
+            });
+            if(imgIdx!=-1){//有图片显示，需要增加那一列的宽和高
+                orderTable.find("th:eq("+imgIdx+")").width("165px");
+                orderTable.find("tr:gt(0)").height("165px");
             }
-        });
-        if(imgIdx!=-1){//有图片显示，需要增加那一列的宽和高
-            orderTable.find("th:eq("+imgIdx+")").width("165px");
-            orderTable.find("tr:gt(0)").height("165px");
         }
         
         var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>"; 
