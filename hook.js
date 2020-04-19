@@ -1,4 +1,9 @@
 (function(){
+    if(!document.f2 || !document.f2.action){
+        console.log("只支持在订单列表页面执行");
+        alert("只支持在订单列表页面执行");
+        return;
+    }
     var pageSize=parseInt($("#SearchRecordPage").val());
     var totalCount =parseInt( $("#TotalCount").val());
     var currentPage= parseInt($("#pagePage").val());
@@ -61,7 +66,7 @@
                 });
                 
                 data.push(allInputValue);
-                console.log(orderId+" 有 "+allInputValue.itemCount + " 个商品,信息获取完成 ");
+                console.log(allInputValue.orderId+" 有 "+allInputValue.itemCount + " 个商品,信息获取完成 ");
                 if(!addr){
                     getInfo();
                 }
