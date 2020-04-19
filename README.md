@@ -19,8 +19,10 @@ var script= document.createElement('script');
 script.type= 'text/javascript';
 script.src= 'https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/ffc30c3a52a84d085edfa94dfca20c1f62e5a10e/hook.min.js?t='+(+new Date);
 head.appendChild(script);
-//使用jQuery
+//使用jQuery  CDN
 $.getScript('https://rawcdn.githack.com/sporttery/yahoo_order_export_tools/ffc30c3a52a84d085edfa94dfca20c1f62e5a10e/hook.min.js');
+//使用jQuery
+$.getScript('https://raw.githack.com/sporttery/yahoo_order_export_tools/master/hook.min.js');
 ```
     
 ### 后面有时间再写一个浏览器插件
