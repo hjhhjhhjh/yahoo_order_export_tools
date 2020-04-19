@@ -15,24 +15,25 @@
             postdata[item.name]=item.value;
         }
     })
+    var postUrl = document.f2.action;
     getotherlink=function(page,toPage){
         if(location.href.startsWith("file://")){
             console.log("本地环境，直接返回。");
             return;
         }
         if(!toPage){
-            toPage=totalPages
+            toPage=totalPages;
         }
         if(page<=toPage){
             console.log("正在获取第 "+page+"/"+toPage+" 页");
             postdata["page"]=page;
-            $.post(document.f2.action,postdata,function(d){
+            $.post(postUrl,postdata,function(d){
                 for(var i=0;i<parseInt(pageSize);i++){
                     if($(d).find("#orderId"+i).length==1){
                         link.push($(d).find("#orderId"+i).attr("onclick").split("'")[1]);
                     }
                 }
-                page=page+1
+                page=page+1;
                 getotherlink(page,toPage)
             })
         }else{
@@ -77,7 +78,7 @@
         }else if(b.payActionTime!=""){
             return -1;
         }else{
-            return parseInt(a.orderId.split("-")[1])-parseInt(b.orderId.split("-")[1])
+            return parseInt(a.orderId.split("-")[1])-parseInt(b.orderId.split("-")[1]);
         }
     }
     
@@ -96,7 +97,6 @@
     '" value="'+columns[item]+'" class="dataColumn" onchange="addColumn(this)"/><span style="color:red;font-size:21px" id="'+item+'_number"></span>')});
     document.write("<div><h1>默认导出数据</h1></div>");
     getTrStr=function(arr,max_td_count){
-        var td_length=1;
         var trs = [],tds=[];
         for(var i=0;i<arr.length;i++){
             tds.push("<td>" + arr[i] + "</td>");
@@ -162,9 +162,9 @@
     exportOption += "<tr><td>导出支付时间之后的订单：日期：<input id='payTimeAfterDate' type='date' value='' placeholder='2020-04-14' />&nbsp;时间：<input id='payTimeAfterTime' type='time' value='' placeholder='00:00:00' />&nbsp;<i style='font-size:12px;color:#666'>设置时间后，将导出支付时间在这个之后的订单</i></td></tr>";
     exportOption +="<tr><td>导出页数范围：<input id='startPage' type='number' value='"+currentPage+"' min='"+currentPage+"' max='"+totalPages+"' maxlength='3' size='3' style='width:3em'/> - "+
             "<input id='endPage' type='number'  value='"+totalPages+"'  min='"+currentPage+"' max='"+totalPages+"' maxlength='3' size='3' style='width:3em' />&nbsp; <i style='font-size:12px;color:#666'>修改此项可以导出指定页数的数据，默认是全部页</i> </td></tr>";
-    exportOption += "<tr><td style='text-align:center'><a href='javascript:showData()' style='font-size:50px;color:red;font-weight:bold;cursor:pointer' >导出</a>"+
+    exportOption += "<tr><td style='text-align:center'><a href='javascript:showData()' style='font-size:50px;color:red;font-weight:bold;cursor:pointer' >生成数据</a>"+
     "&nbsp;&nbsp;<a href='javascript:location.reload()' style='font-size:20px;color:#000;font-weight:bold;cursor:pointer' >退出</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-    "<a href='javascript:saveExcel()' id='downloadFile' style='font-size:50px;font-weight:bold;cursor:pointer;display:none;' >下载</a></td></tr>";
+    "<a href='javascript:save2Excel()' id='downloadFile' style='font-size:50px;font-weight:bold;cursor:pointer;display:none;' >下载表格</a></td></tr>";
     exportOption += "<tr style='display:none'><td id='cMsg' style='text-align:left;color:red'>&nbsp;</td></tr>";
     document.write("<table class=gridtable>"+exportOption+"</table><br/>");
     
@@ -251,7 +251,7 @@
                     for(var i=0;i<keyArr.length;i++){
                         value = obj[keyArr[i]];
                         if(value){
-                            values.push(value)
+                            values.push(value);
                         }
                     }
                     arr.push(values.join(""));
@@ -272,7 +272,23 @@
                 arrLen = arrIndex[0].values.length;
                 for(var i=0;i<arrLen;i++){
                     arrIndex.forEach(v=>{
-                        arr[v.index]=v.values[i];
+                        if(v.key=="itemOption"){
+                            itemOptions = v.values[i].split("�");
+                            if(itemOptions.length>1){
+                                arr[v.index] = "";
+                                itemOptions.forEach((n,ni)=>{
+                                    if(ni%2==0){
+                                        arr[v.index] += n + ":";
+                                    }else{
+                                        arr[v.index] += n + "<br/>";
+                                    }
+                                })
+                            }else{
+                                arr[v.index]=v.values[i];
+                            }
+                        }else{
+                            arr[v.index]=v.values[i];
+                        }
                     })
                     list.push(arr);
                 }
@@ -285,14 +301,20 @@
             var arr = list[i];
             trs.push("<tr><td>"+arr.join("</td><td>")+"</td></tr>");
         }
-        document.write("<table class=gridtable id=\"orderTable\">"+trs.join("")+"</table>");
-
-        $("#downloadFile").show();
+        var orderTable = document.querySelector("#orderTable");
+        if(orderTable){
+            orderTable.innerHTML = trs.join("");
+        }else{
+            document.write("<table class=gridtable id=\"orderTable\">"+trs.join("")+"</table>");
+        }
+        if(trs.length>1){
+            $("#downloadFile").show();
+        }
 
         console.log = o_console_log;
     }
 
-    saveExcel=function(){
+    save2Excel=function(){
         var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>"; 
         excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">'; 
         excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel'; 
