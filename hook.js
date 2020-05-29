@@ -18,7 +18,7 @@
     var totalCount = parseInt($("#TotalCount").val());
     var currentPage = parseInt($("#pagePage").val());
     var totalPages = parseInt((totalCount + pageSize - 1) / pageSize);
-    var link = [], data = [];
+    link = [], data = [];
     page_link_cache["_" + currentPage] = [];
     for (var i = 0; i < pageSize; i++) {
         if ($("#orderId" + i).length == 1) {
@@ -226,9 +226,20 @@
             item = data[i];
             infoArr=[];
             for(var j = 0;j<keys.length;j++){
-                value = item[keys[j]];
+                var key = keys[j];
+                value = item[key];
                 if(value){
                     infoArr.push(value);
+                }else if (key.indexOf("+") != -1) {
+                    keyArr = key.split("+");
+                    values = [];
+                    for (var i = 0; i < keyArr.length; i++) {
+                        value = item[keyArr[i]];
+                        if (value) {
+                            values.push(value);
+                        }
+                    }
+                    infoArr.push(values.join(""));
                 }else{
                     infoArr.push("");
                 }
