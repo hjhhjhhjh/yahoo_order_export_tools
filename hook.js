@@ -206,6 +206,8 @@
     
     showData1  = function (onlyPay,payTimeAfter){
         th=["订单id","订单时间","商品名称","商品编码","收件电话","收件人","收件邮编","收件人地址","物品数量","单价金额","合計金額","付款状态","支付时间"]
+        var keys = ["orderId","orderTime",  "itemName",  "itemId", "shipPhoneNumber", "shipLastName+shipFirstName", "shipZipCode", "shipPrefecture+shipCity+shipAddress1+shipAddress2",
+            "quantity",  "unitPrice",  "totalPrice",  "payInfo",  "payActionTime"];
         trs=[];
         trs.push("<th>"+th.join("</th><th>")+"</th>");
         data.sort(function(a,b){
@@ -221,7 +223,16 @@
         })
         
         for(var i=0;i<data.length;i++){
-            infoArr = data[i];
+            item = data[i];
+            infoArr=[];
+            for(var j = 0;j<keys.length;j++){
+                value = item[keys[j]];
+                if(value){
+                    infoArr.push(value);
+                }else{
+                    infoArr.push("");
+                }
+            }
             if(onlyPay==1 && infoArr[12] == ""){
                 continue;
             }
