@@ -203,6 +203,38 @@
     exportOption += "<tr style='display:none'><td><div id=\"cMsg\" style=\"text-align:left;color:red;height:100px;width:100%;overflow-y:scroll\"></div></td></tr>";
     document.write("<table class=gridtable>" + exportOption + "</table><br/>");
 
+    
+    showData1  = function (onlyPay,payTimeAfter){
+        th=["订单id","订单时间","商品名称","商品编码","收件电话","收件人","收件邮编","收件人地址","物品数量","单价金额","合計金額","付款状态","支付时间"]
+        trs=[];
+        trs.push("<th>"+th.join("</th><th>")+"</th>");
+        data.sort(function(a,b){
+            if(a.payActionTime!="" && b.payActionTime != ""){
+                return new Date(a.payActionTime).getTime() - new Date(b.payActionTime).getTime();
+            }else if(a.payActionTime!=""){
+                return 1;
+            }else if(b.payActionTime!=""){
+                return -1;
+            }else{
+                return parseInt(a.orderId.split("-")[1])-parseInt(b.orderId.split("-")[1])
+            }
+        })
+        
+        for(var i=0;i<data.length;i++){
+            infoArr = data[i];
+            if(onlyPay==1 && infoArr[12] == ""){
+                continue;
+            }
+            if(payTimeAfter!="" && infoArr[12] != "" && new Date(infoArr[12]).getTime() < new Date(payTimeAfter).getTime() ){
+                continue;
+            }
+            trs.push("<td>"+infoArr.join("</td><td>")+"</td>");
+        }
+        return ("<table border=\"1\"><tr>"+trs.join("</tr><tr>")+"</tr></table>");
+    };
+
+    dataTableFH = "";
+
     showData = function (action) {
         o_console_log = console.log;
         cMsg = $("#cMsg");
@@ -250,6 +282,7 @@
         if (payTimeAfter.length < 5) {
             payTimeAfter = false;
         }
+        dataTableFH=showData1(onlyPay,payTimeAfter);
         data.forEach((obj, objIndex) => {
             arrKey = {};
             itemCount = parseInt(obj.itemCount);
@@ -395,21 +428,41 @@
     }
 
     save2Excel = function () {
-        isMac = navigator.userAgent.toLowerCase().indexOf("mac") != -1;
-        isWindows = navigator.userAgent.toLowerCase().indexOf("windows") != -1;
-        var orderTable = $("#orderTable");
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth() + 1;
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        var FileName = now.getFullYear() + "" + (month < 10 ? "0" + month : month) + "" + (date < 10 ? "0" + date : date) + "" + hour + "" + minute + "" + second;
+
+        table2Excel(orderTable,FileName+"-采购");
+        table2Excel(dataTableFH,FileName+"-发货");
+    }
+
+    table2Excel = function (tableOrHtml,FileName) {
+        isMac = false;
+        isWindows = false;
         var imgIdx = -1;
-        if (isMac) {
-            orderTable.find("tr:eq(1)").find("td").each((idx, td) => {
-                if ($(td).find("img").length == 1) {
-                    imgIdx = idx;
-                    return false;
+        var html ;
+        if(typeof(tableOrHtml)=="string"){
+            html = tableOrHtml;
+        }else{
+            isMac = navigator.userAgent.toLowerCase().indexOf("mac") != -1;
+            isWindows = navigator.userAgent.toLowerCase().indexOf("windows") != -1;
+            if (isMac) {
+                orderTable.find("tr:eq(1)").find("td").each((idx, td) => {
+                    if ($(td).find("img").length == 1) {
+                        imgIdx = idx;
+                        return false;
+                    }
+                });
+                if (imgIdx != -1) {//有图片显示，需要增加那一列的宽和高
+                    orderTable.find("th:eq(" + imgIdx + ")").width("165px");
+                    orderTable.find("tr:gt(0)").height("165px");
                 }
-            });
-            if (imgIdx != -1) {//有图片显示，需要增加那一列的宽和高
-                orderTable.find("th:eq(" + imgIdx + ")").width("165px");
-                orderTable.find("tr:gt(0)").height("165px");
             }
+            html = orderTable[0].outerHTML;
         }
 
         var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
@@ -435,7 +488,7 @@
         excelFile += "<![endif]-->";
         excelFile += "</head>";
         excelFile += "<body>";
-        excelFile += orderTable[0].outerHTML;
+        excelFile += html;
         excelFile += "</body>";
         excelFile += "</html>";
 
@@ -444,14 +497,7 @@
             orderTable.find("tr:gt(0)").height("");
         }
 
-        var now = new Date();
-        var date = now.getDate();
-        var month = now.getMonth() + 1;
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
-        var FileName = now.getFullYear() + "" + (month < 10 ? "0" + month : month) + "" + (date < 10 ? "0" + date : date) + "" + hour + "" + minute + "" + second;
-
+        
         var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
 
 
