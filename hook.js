@@ -18,7 +18,7 @@
     var totalCount = parseInt($("#TotalCount").val());
     var currentPage = parseInt($("#pagePage").val());
     var totalPages = parseInt((totalCount + pageSize - 1) / pageSize);
-    link = [], data = [];
+    link = [], data = [], startPage = 1, endPage = 1;
     page_link_cache["_" + currentPage] = [];
     for (var i = 0; i < pageSize; i++) {
         if ($("#orderId" + i).length == 1) {
@@ -37,6 +37,7 @@
     getotherlink = function (page, toPage) {
         if (location.href.startsWith("file://")) {
             console.log("本地环境，直接返回。");
+            gotoGetInfo();
             return;
         }
         if (!toPage) {
@@ -62,6 +63,8 @@
                     getotherlink(page, toPage)
                 })
             }
+        } else {
+            gotoGetInfo();
         }
     }
     var orderCount = -1;
@@ -69,6 +72,7 @@
         if (location.href.startsWith("file://")) {
             data = [{ "payInfo": "入金済み", "cancelReason": "", "cancelReasonDetail": "", "parentOrderId": "", "orderTime": "2019-12-22T20:09:29+09:00", "releaseDate": "", "deviceType": "3", "isRoyaltyFix": "true", "royaltyFixTime": "2019-12-26T11:35:52+09:00", "firstOrderDoneDate": "2019-12-26", "isLogin": "true", "fspLicenseName": "プラチナ", "usePointType": "T", "isAffiliate": "false", "orderId": "kidscoordinate-10000019", "suspect": "0", "suspectMessage": "", "childOrderId": "", "orderStatus": "5", "isSeen": "true", "beforeOrderStatus": "5", "isUsePointFix": "", "refundStatus": "", "refundTotalPrice": "", "shipZipCode": "6038112", "shipPrefecture": "京都府", "shipCity": "京都市北区", "shipAddress1": "小山元町4 薮方", "shipAddress2": "", "shipPrefectureKana": "", "shipCityKana": "", "shipAddress1Kana": "", "shipAddress2Kana": "", "shipLastName": "中河", "shipFirstName": "多香子", "shipLastNameKana": "ナカガワ", "shipFirstNameKana": "タカコ", "shipPhoneNumber": "0754912041", "shipEmgPhoneNumber": "", "shipSection1Field": "", "shipSection1Value": "", "shipSection2Field": "", "shipSection2Value": "", "needGiftWrap": "", "giftWrapType": "", "giftWrapMessage": "", "needGiftWrapPaper": "", "giftWrapPaperType": "", "giftWrapName": "", "option1Field": "", "option1Value": "", "option2Field": "", "option2Value": "", "shipRequestDate": "", "shipRequestTime": "", "shipRequestTimeStart": "00", "shipRequestTimeEnd": "", "arriveType": "0", "shipNotes": "", "shipDate": "2019-12-25", "arrivalDate": "2019-12-27", "shipCompanyCode": "1002", "shipInvoiceNumber1": "517766961342", "shipInvoiceNumber2": "", "shipUrl": "", "shipMethod": "postage2", "shipMethodName": "佐川急便", "isLinkDeliverSeino": "false", "beforeShipStatus": "3", "billZipCode": "6038112", "billPrefecture": "京都府", "billCity": "京都市北区", "billAddress1": "小山元町4 薮方", "billAddress2": "", "billPrefectureKana": "", "billCityKana": "", "billAddress1Kana": "", "billAddress2Kana": "", "billLastName": "中河", "billFirstName": "多香子", "billLastNameKana": "ナカガワ", "billFirstNameKana": "タカコ", "billPhoneNumber": "0754912041", "billEmgPhoneNumber": "", "billMailAddress": "lamune1107@gmail.com", "needDetailedSlip": "", "needReceipt": "", "needBillSlip": "", "buyerComments": "", "billSection1Field": "", "billSection1Value": "", "billSection2Field": "", "billSection2Value": "", "payActionTime": "2019-12-26T11:35:52+09:00", "ageConfirmField": "", "ageConfirmValue": "", "ageConfirmCheck": "", "payMethod": "payment_a17", "payMethodName": "PayPay残高払い", "payMethodAmount": "481", "payKind": "6", "combinedPayMethod": "payment_a1", "combinedPayMethodName": "クレジットカード決済", "combinedPayMethodAmount": "2865", "combinedPayKind": "0", "settleStatus": "5", "settleId": "k1912228582505", "isAutoPayNo": "", "cardPayType": "1", "cardPayCount": "", "payNo": "", "payNoIssueDate": "", "agencyNumber": "", "confirmNumber": "", "beforePayStatus": "1", "paymentTitle": "", "payment_sort": "a1%_^A_%a17%_^A_%a16%_^A_%a9%_^A_%a10%_^A_%a11%_^A_%a8%_^A_%a6%_^A_%a7%_^A_%b1%_^A_%d1", "paymentTitleList[b1]": "城北信用金庫", "paymentTitleList[d1]": "商品代引", "useCouponData": "cDhyOTRtVkFEQ3hTJmtpZCYxNTc2NDY4NTgx\\A500円OFF-対象商品限定\\A1\\Aladiesfashion\\A1\\B", "totalCouponDiscount": "500", "shippingCouponDiscount": "0", "shippingCouponFlg": "0", "couponCampaignCode": "", "totalMallCouponDiscount": "", "giftWrapCharge": "0", "shipCharge": "600", "payCharge": "0", "discount": "0", "title1": "ダッフルコート レディース ロング アウター ジャケット グレー 秋冬 2019新作 人気", "subCodeOption1": "", "itemOption1": "カラー�グレー�サイズ�フリーサイズ", "inscription1": "", "itemId1": "1107lt3225", "subCode1": "1107lt3225-01", "unitPrice1": "2870", "priceType1": "1", "quantity1": "1", "releaseDate1": "", "pointFspCode1": "", "unitGetPoint1": "28", "getPointType1": "T", "isGetPointFix1": "true", "getPointFixDate1": "2019-12-27", "lineTotalPrice1": "2870", "isUsed1": "false", "beforeReleaseDate1": "", "subtotalPrice": "2870", "usePoint": "124", "totalPrice": "3346", "itemCount": "1", "cartMaxLine": "50", "referer": "", "entryPoint": "", "isSeller": "false", "csrf": "NjRjNGFiZjA4OTQ5ZDU2YjVjYzNkODcyODg4ZDE4MGVmNjQxNDgxNjU1Njk4NTM0YTNjMzgyOTc1ZDEyMGFlZllJM3ZzeUk4N2Y4cThjc0JyL0ZVbklCaVA1NFdiSENlYktQM1NkVEUrc0w2OWFybnNUSkhFc0R4QzVHNXRoWUJWQUxoYmJpQVhFQTlQQ3doZkt2YXZMeXhSdkFBZkFiZnlHR1ZmNUYwM2dLbTdZUXdSNTd1dEdZeUh5L1JDMjFmdGVnSUVBR3lMOUJ3amVrWU55YTFSQT09", "yjbfp_items": "ua\u0002Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\u0001lang\u0002zh-CN\u0001screen_height\u00021440\u0001screen_width\u00022560\u0001timezone_offset\u0002-480\u0001plugins\u0002Chrome PDF Plugin|Chrome PDF Viewer|Native Client\u0001canvas_image\u0002iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAACT0lEQVQ4T9WUP0hbURSHP6NV1Ka0JVAs1IiNf6igUkRwCA4uIi6iJIMQNzUZBLcQhIAIDg4uChrHEFARRINCQMgSUUFQQ6WkxjY0xhcSLOp7FlttUu4TK2IjYqfe6d7DPd8553d/72XxjytL5KfTs+nHcv4jQH8/LC7C/v7tYR88wugorK3B7OwjAddpPl+ESOSUnp5qNfSng74+CIdhefmmgjibzTAyApubEAiAwyERiym0t5fdBrjdYLHAxgbU119BBgfB6QRZFokwPw/RaIYRFAW0WrDZIhiN55hMlej10NICw8PnOBxhAoE3TE6eEYvJmEwVtzsQJ6sV/P4kVusBen0ZbW1PWV2Fy8sDPJ4kPl81ExNRIpETentr7gLW18Fo/IXdHkSSXuD3l7C3By7XDsGgFq+3lKkpIWIGQDoNlZXQ0PCZROKExsZazGYZr3efUMjAwoL2foDoSbz30JBMXV0Yp7OEo6NvHB6esbtbrYp4bwcCEI9DURF0dgbp6ChQBautfcXMzOuHAYRVDQYYG5NIpeKqUF1dVdjtufh8MD6eQQNRWRjF5YKdHQiFLnC7P6DTFVBcXIHNdvXMAwMZAFtb8P791aWlJaiqOsfj+Uh5uZ7m5peUlorqkEp9IRqV71r5ev68vAsk6ZTt7QTHxz/o7q4hkchCp0sTj8usrHwlJ0eDxfLurg9ERJLOmJv7hEYDra1v0eufqReTye9MT4fIzc2mqakYg+H53wEiqigX5OfnkJ2tfmvqEh5RlJ8UFj5Bo7mJ3+we+VP8DR//QTKrkbYiAAAAAElFTkSuQmCC", "dummy": "", "radCancelReason": "230" }];
             console.log("本地环境，直接返回。");
+            gotoShowData();
             return;
         }
         if (orderCount == -1) {
@@ -99,6 +103,7 @@
             }
         } else {
             console.log("没有更多订单了");
+            gotoShowData();
         }
     }
     sortByPayTime = function (a, b) {
@@ -199,94 +204,115 @@
         "<input id='endPage' type='number'  value='" + totalPages + "'  min='" + currentPage + "' max='" + totalPages + "' maxlength='3' size='3' style='width:3em' />&nbsp; <i style='font-size:12px;color:#666'>修改此项可以导出指定页数的数据，默认是全部页</i> </td></tr>";
     exportOption += "<tr><td style='text-align:center'><a href='javascript:showData()' style='font-size:50px;color:red;font-weight:bold;cursor:pointer' >生成数据</a>" +
         "&nbsp;&nbsp;<a href='javascript:location.reload()' style='font-size:20px;color:#000;font-weight:bold;cursor:pointer' >退出</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
-        "<a href='javascript:save2Excel()' id='downloadFile' style='font-size:50px;font-weight:bold;cursor:pointer;display:none;' >下载表格</a></td></tr>";
+        // "<a href='javascript:save2Excel()' id='downloadFile' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载表格</a>&nbsp;&nbsp;"+
+        "<a href='javascript:save2Excel1()' id='downloadFile1' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载发货表格</a>&nbsp;&nbsp;"+
+    "<a href='javascript:save2Excel2()' id='downloadFile2' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载采购表格</a></td></tr>";
     exportOption += "<tr style='display:none'><td><div id=\"cMsg\" style=\"text-align:left;color:red;height:100px;width:100%;overflow-y:scroll\"></div></td></tr>";
     document.write("<table class=gridtable>" + exportOption + "</table><br/>");
 
-    
-    showData1  = function (onlyPay,payTimeAfter){
-        th=["订单id","订单时间","商品名称","商品编码","收件电话","收件人","收件邮编","收件人地址","物品数量","单价金额","合計金額","付款状态","支付时间"]
-        var keys = ["orderId","orderTime",  "itemName",  "itemId", "shipPhoneNumber", "shipLastName+shipFirstName", "shipZipCode", "shipPrefecture+shipCity+shipAddress1+shipAddress2",
-            "quantity",  "unitPrice",  "totalPrice",  "payInfo",  "payActionTime"];
-        trs=[];
-        trs.push("<th>"+th.join("</th><th>")+"</th>");
-        data.sort(function(a,b){
-            if(a.payActionTime!="" && b.payActionTime != ""){
+
+    showData1 = function (onlyPay, payTimeAfter) {
+        th = ["订单id", "订单时间", "商品名称", "商品编码", "收件电话", "收件人", "收件邮编", "收件人地址", "物品数量", "单价金额", "合計金額", "付款状态", "支付时间"]
+        var keys = ["orderId", "orderTime", "itemName", "itemId", "shipPhoneNumber", "shipName",
+            "shipZipCode", "shipAddress", "quantity", "unitPrice", "totalPrice", "payInfo", "payActionTime"];
+        trs = [];
+        trs.push("<th>" + th.join("</th><th>") + "</th>");
+        var myData = [];
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            if (!item) {
+                continue;
+            }
+            var myItem = {};
+            myItem.orderId = item.orderId;
+            myItem.orderTime = item.orderTime;
+            myItem.shipPhoneNumber = item.shipPhoneNumber;
+            myItem.shipName = item.shipLastName + item.shipFirstName;
+            myItem.shipZipCode = item.shipZipCode;
+            myItem.shipAddress = item.shipPrefecture + item.shipCity + item.shipAddress1 + item.shipAddress2;
+            myItem.totalPrice = item.totalPrice;
+            myItem.payInfo = item.payInfo;
+            myItem.payActionTime = item.payActionTime;
+            itemCount = parseInt(item.itemCount);
+            if (itemCount > 1) {
+                for (var i = 1; i <= itemCount; i++) {
+                    var newMyItem = {};
+                    newMyItem.orderId = myItem.orderId;
+                    newMyItem.orderTime = myItem.orderTime;
+                    newMyItem.shipPhoneNumber = myItem.shipPhoneNumber;
+                    newMyItem.shipName = myItem.shipName;
+                    newMyItem.shipZipCode = myItem.shipZipCode;
+                    newMyItem.shipAddress = myItem.shipAddress;
+                    newMyItem.totalPrice = myItem.totalPrice;
+                    newMyItem.payInfo = myItem.payInfo;
+                    newMyItem.payActionTime = myItem.payActionTime;
+
+                    newMyItem.itemName = item.title + i;
+                    newMyItem.itemId = item.itemId + i;
+                    newMyItem.quantity = item.quantity + i;
+                    newMyItem.unitPrice = item.unitPrice + i;
+                    myData.push(newMyItem);
+                }
+            } else {
+                myItem.itemName = item.title1;
+                myItem.itemId = item.itemId1;
+                myItem.quantity = item.quantity1;
+                myItem.unitPrice = item.unitPrice1;
+                myData.push(myItem);
+            }
+        }
+        myData.sort(function (a, b) {
+            if (a.payActionTime != "" && b.payActionTime != "") {
                 return new Date(a.payActionTime).getTime() - new Date(b.payActionTime).getTime();
-            }else if(a.payActionTime!=""){
+            } else if (a.payActionTime != "") {
                 return 1;
-            }else if(b.payActionTime!=""){
+            } else if (b.payActionTime != "") {
                 return -1;
-            }else{
-                return parseInt(a.orderId.split("-")[1])-parseInt(b.orderId.split("-")[1])
+            } else {
+                return parseInt(a.orderId.split("-")[1]) - parseInt(b.orderId.split("-")[1])
             }
         })
-        
-        for(var i=0;i<data.length;i++){
-            item = data[i];
-            infoArr=[];
-            for(var j = 0;j<keys.length;j++){
+
+        for (var i = 0; i < myData.length; i++) {
+            var item = myData[i];
+
+            var infoArr = [];
+            for (var j = 0; j < keys.length; j++) {
                 var key = keys[j];
-                value = item[key];
-                if(value){
+                var value = item[key];
+                if (value) {
                     infoArr.push(value);
-                }else if (key.indexOf("+") != -1) {
-                    keyArr = key.split("+");
-                    values = [];
-                    for (var i = 0; i < keyArr.length; i++) {
-                        value = item[keyArr[i]];
-                        if (value) {
-                            values.push(value);
-                        }
-                    }
-                    infoArr.push(values.join(""));
-                }else{
+                } else {
                     infoArr.push("");
                 }
             }
-            if(onlyPay==1 && infoArr[12] == ""){
+            if (onlyPay == 1 && infoArr[12] == "") {
                 continue;
             }
-            if(payTimeAfter!="" && infoArr[12] != "" && new Date(infoArr[12]).getTime() < new Date(payTimeAfter).getTime() ){
+            if (payTimeAfter != "" && infoArr[12] != "" && new Date(infoArr[12]).getTime() < new Date(payTimeAfter).getTime()) {
                 continue;
             }
-            trs.push("<td>"+infoArr.join("</td><td>")+"</td>");
+            trs.push("<td>" + infoArr.join("</td><td>") + "</td>");
         }
-        return ("<table border=\"1\"><tr>"+trs.join("</tr><tr>")+"</tr></table>");
+        return ("<table border=\"1\"><tr>" + trs.join("</tr><tr>") + "</tr></table>");
     };
 
     dataTableFH = "";
-
-    showData = function (action) {
-        o_console_log = console.log;
-        cMsg = $("#cMsg");
-        cMsg.parents("tr").show();
-        cMsg = cMsg[0];
-        console.log = function (msg) {
-            o_console_log(msg);
-            cMsg.innerHTML = cMsg.innerHTML + "<br/>" + msg;
-            cMsg.scrollTop = cMsg.scrollHeight;
-        }
-        var startPage = parseInt(document.querySelector("#startPage").value);
-        var endPage = parseInt(document.querySelector("#endPage").value);
-        $.ajaxSetup({ async: false });
-        link = [];
-        if (startPage <= endPage) {
-            getotherlink(startPage, endPage);
-        }
-
+    gotoGetInfo = function () {
         for (var i = startPage; i <= endPage; i++) {
-            page_link_cache["_" + i].forEach(item => {
+            page_link_cache["_" + i] && page_link_cache["_" + i].forEach(item => {
                 link.push(item);
             })
         }
         console.log("所有页面获取完成,共有 " + link.length + " 个订单 ");
         data = [];
         getInfo();
+    }
+
+    gotoShowData = function () {
         link.forEach(item => {
             data.push(order_cache[item]);
         })
-        $.ajaxSetup({ async: true });
         // data.sort(sortByPayTime);
         var allCheckedInputs = document.querySelectorAll(".dataColumn:checked");
         var dataKeys = [];
@@ -304,8 +330,11 @@
         if (payTimeAfter.length < 5) {
             payTimeAfter = false;
         }
-        dataTableFH=showData1(onlyPay,payTimeAfter);
+        dataTableFH = showData1(onlyPay, payTimeAfter);
         data.forEach((obj, objIndex) => {
+            if (!obj || !obj.itemCount) {
+                return true;
+            }
             arrKey = {};
             itemCount = parseInt(obj.itemCount);
             obj.itemCount = itemCount;
@@ -337,6 +366,9 @@
 
         });
         data.forEach((obj, objIndex) => {
+            if (!obj || !obj.itemCount) {
+                return true;
+            }
             payActionTime = obj.payActionTime;
             if (onlyPay && payActionTime == "") {
                 return true;
@@ -445,8 +477,27 @@
         }
         if (trs.length > 1) {
             $("#downloadFile").show();
+            $("#downloadFile1").show();
+            $("#downloadFile2").show();
         }
         console.log = o_console_log;
+    }
+    showData = function (action) {
+        o_console_log = console.log;
+        cMsg = $("#cMsg");
+        cMsg.parents("tr").show();
+        cMsg = cMsg[0];
+        console.log = function (msg) {
+            o_console_log(msg);
+            cMsg.innerHTML = cMsg.innerHTML + "<br/>" + msg;
+            cMsg.scrollTop = cMsg.scrollHeight;
+        }
+        startPage = parseInt(document.querySelector("#startPage").value);
+        endPage = parseInt(document.querySelector("#endPage").value);
+        link = [];
+        if (startPage <= endPage) {
+            getotherlink(startPage, endPage);
+        }
     }
 
     save2Excel = function () {
@@ -457,19 +508,43 @@
         var minute = now.getMinutes();
         var second = now.getSeconds();
         var FileName = now.getFullYear() + "" + (month < 10 ? "0" + month : month) + "" + (date < 10 ? "0" + date : date) + "" + hour + "" + minute + "" + second;
-
-        table2Excel(orderTable,FileName+"-采购");
-        table2Excel(dataTableFH,FileName+"-发货");
+        var orderTable = $("#orderTable");
+        table2Excel(orderTable, FileName + "-采购");
+        table2Excel(dataTableFH, FileName + "-发货");
     }
 
-    table2Excel = function (tableOrHtml,FileName) {
+    save2Excel1 = function () {
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth() + 1;
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        var FileName = now.getFullYear() + "" + (month < 10 ? "0" + month : month) + "" + (date < 10 ? "0" + date : date) + "" + hour + "" + minute + "" + second;
+        table2Excel(dataTableFH, FileName + "-发货");
+    }
+
+    save2Excel2 = function () {
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth() + 1;
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        var FileName = now.getFullYear() + "" + (month < 10 ? "0" + month : month) + "" + (date < 10 ? "0" + date : date) + "" + hour + "" + minute + "" + second;
+        var orderTable = $("#orderTable");
+        table2Excel(orderTable, FileName + "-采购");
+    }
+
+    table2Excel = function (tableOrHtml, FileName) {
         isMac = false;
         isWindows = false;
         var imgIdx = -1;
-        var html ;
-        if(typeof(tableOrHtml)=="string"){
+        var html, orderTable;
+        if (typeof (tableOrHtml) == "string") {
             html = tableOrHtml;
-        }else{
+        } else {
+            orderTable = tableOrHtml;
             isMac = navigator.userAgent.toLowerCase().indexOf("mac") != -1;
             isWindows = navigator.userAgent.toLowerCase().indexOf("windows") != -1;
             if (isMac) {
@@ -519,7 +594,7 @@
             orderTable.find("tr:gt(0)").height("");
         }
 
-        
+
         var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
 
 
