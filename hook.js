@@ -1,5 +1,6 @@
 (function () {
-    var page_link_cache = { "length": 0 }, order_cache = {};
+    console.clear();
+    page_link_cache = { "length": 0 }, order_cache = {}, link = [], data = [], startPage = 1, endPage = 1, dataTableFH = "", orderCount = -1, loadCount = 0;
     if (!document.f2 || !document.f2.action || typeof jQuery == "undefined") {
         console.log("只支持在订单列表页面执行");
         alert("只支持在订单列表页面执行");
@@ -18,7 +19,7 @@
     var totalCount = parseInt($("#TotalCount").val());
     var currentPage = parseInt($("#pagePage").val());
     var totalPages = parseInt((totalCount + pageSize - 1) / pageSize);
-    link = [], data = [], startPage = 1, endPage = 1;
+
     page_link_cache["_" + currentPage] = [];
     for (var i = 0; i < pageSize; i++) {
         if ($("#orderId" + i).length == 1) {
@@ -34,20 +35,26 @@
         }
     })
     var postUrl = document.f2.action;
-    getotherlink = function (page, toPage) {
+    getotherlink = function (page, toPage, isRecursive) {
         if (location.href.startsWith("file://")) {
             console.log("本地环境，直接返回。");
             gotoGetInfo();
             return;
         }
+
         if (!toPage) {
             toPage = totalPages;
         }
         if (page <= toPage) {
-            console.log("正在获取第 " + page + "/" + toPage + " 页");
+            console.log("正在获取", page, "页的数据，请稍候");
             if (page_link_cache["_" + page]) {
-                page = page + 1;
-                getotherlink(page, toPage)
+                console.log("获取第 " + page + "/" + toPage + " 页 完成");
+                if (isRecursive) {
+                    getotherlink(page+1, toPage, isRecursive);
+                } else if (page == toPage) {
+                    console.log("所有页面获取完成,共有 " + page_link_cache.length + " 个订单 ");
+                    gotoGetInfo();
+                }
             } else {
                 postdata["page"] = page;
                 $.post(postUrl, postdata, function (d) {
@@ -59,16 +66,21 @@
                         }
                     }
                     page_link_cache.length += page_link_cache["_" + page].length;
-                    page = page + 1;
-                    getotherlink(page, toPage)
+                    console.log("获取第 " + page + "/" + toPage + " 页 完成");
+                    if (isRecursive) {
+                        getotherlink(page+1, toPage, isRecursive);
+                    } else if (page == toPage) {
+                        console.log("所有页面获取完成,共有 " + page_link_cache.length + " 个订单 ");
+                        gotoGetInfo();
+                    }
                 })
             }
         } else {
+            console.log("所有页面获取完成,共有 " + page_link_cache.length + " 个订单 ");
             gotoGetInfo();
         }
     }
-    var orderCount = -1;
-    getInfo = function () {
+    getInfo = function (idx) {
         if (location.href.startsWith("file://")) {
             data = [{ "payInfo": "入金済み", "cancelReason": "", "cancelReasonDetail": "", "parentOrderId": "", "orderTime": "2019-12-22T20:09:29+09:00", "releaseDate": "", "deviceType": "3", "isRoyaltyFix": "true", "royaltyFixTime": "2019-12-26T11:35:52+09:00", "firstOrderDoneDate": "2019-12-26", "isLogin": "true", "fspLicenseName": "プラチナ", "usePointType": "T", "isAffiliate": "false", "orderId": "kidscoordinate-10000019", "suspect": "0", "suspectMessage": "", "childOrderId": "", "orderStatus": "5", "isSeen": "true", "beforeOrderStatus": "5", "isUsePointFix": "", "refundStatus": "", "refundTotalPrice": "", "shipZipCode": "6038112", "shipPrefecture": "京都府", "shipCity": "京都市北区", "shipAddress1": "小山元町4 薮方", "shipAddress2": "", "shipPrefectureKana": "", "shipCityKana": "", "shipAddress1Kana": "", "shipAddress2Kana": "", "shipLastName": "中河", "shipFirstName": "多香子", "shipLastNameKana": "ナカガワ", "shipFirstNameKana": "タカコ", "shipPhoneNumber": "0754912041", "shipEmgPhoneNumber": "", "shipSection1Field": "", "shipSection1Value": "", "shipSection2Field": "", "shipSection2Value": "", "needGiftWrap": "", "giftWrapType": "", "giftWrapMessage": "", "needGiftWrapPaper": "", "giftWrapPaperType": "", "giftWrapName": "", "option1Field": "", "option1Value": "", "option2Field": "", "option2Value": "", "shipRequestDate": "", "shipRequestTime": "", "shipRequestTimeStart": "00", "shipRequestTimeEnd": "", "arriveType": "0", "shipNotes": "", "shipDate": "2019-12-25", "arrivalDate": "2019-12-27", "shipCompanyCode": "1002", "shipInvoiceNumber1": "517766961342", "shipInvoiceNumber2": "", "shipUrl": "", "shipMethod": "postage2", "shipMethodName": "佐川急便", "isLinkDeliverSeino": "false", "beforeShipStatus": "3", "billZipCode": "6038112", "billPrefecture": "京都府", "billCity": "京都市北区", "billAddress1": "小山元町4 薮方", "billAddress2": "", "billPrefectureKana": "", "billCityKana": "", "billAddress1Kana": "", "billAddress2Kana": "", "billLastName": "中河", "billFirstName": "多香子", "billLastNameKana": "ナカガワ", "billFirstNameKana": "タカコ", "billPhoneNumber": "0754912041", "billEmgPhoneNumber": "", "billMailAddress": "lamune1107@gmail.com", "needDetailedSlip": "", "needReceipt": "", "needBillSlip": "", "buyerComments": "", "billSection1Field": "", "billSection1Value": "", "billSection2Field": "", "billSection2Value": "", "payActionTime": "2019-12-26T11:35:52+09:00", "ageConfirmField": "", "ageConfirmValue": "", "ageConfirmCheck": "", "payMethod": "payment_a17", "payMethodName": "PayPay残高払い", "payMethodAmount": "481", "payKind": "6", "combinedPayMethod": "payment_a1", "combinedPayMethodName": "クレジットカード決済", "combinedPayMethodAmount": "2865", "combinedPayKind": "0", "settleStatus": "5", "settleId": "k1912228582505", "isAutoPayNo": "", "cardPayType": "1", "cardPayCount": "", "payNo": "", "payNoIssueDate": "", "agencyNumber": "", "confirmNumber": "", "beforePayStatus": "1", "paymentTitle": "", "payment_sort": "a1%_^A_%a17%_^A_%a16%_^A_%a9%_^A_%a10%_^A_%a11%_^A_%a8%_^A_%a6%_^A_%a7%_^A_%b1%_^A_%d1", "paymentTitleList[b1]": "城北信用金庫", "paymentTitleList[d1]": "商品代引", "useCouponData": "cDhyOTRtVkFEQ3hTJmtpZCYxNTc2NDY4NTgx\\A500円OFF-対象商品限定\\A1\\Aladiesfashion\\A1\\B", "totalCouponDiscount": "500", "shippingCouponDiscount": "0", "shippingCouponFlg": "0", "couponCampaignCode": "", "totalMallCouponDiscount": "", "giftWrapCharge": "0", "shipCharge": "600", "payCharge": "0", "discount": "0", "title1": "ダッフルコート レディース ロング アウター ジャケット グレー 秋冬 2019新作 人気", "subCodeOption1": "", "itemOption1": "カラー�グレー�サイズ�フリーサイズ", "inscription1": "", "itemId1": "1107lt3225", "subCode1": "1107lt3225-01", "unitPrice1": "2870", "priceType1": "1", "quantity1": "1", "releaseDate1": "", "pointFspCode1": "", "unitGetPoint1": "28", "getPointType1": "T", "isGetPointFix1": "true", "getPointFixDate1": "2019-12-27", "lineTotalPrice1": "2870", "isUsed1": "false", "beforeReleaseDate1": "", "subtotalPrice": "2870", "usePoint": "124", "totalPrice": "3346", "itemCount": "1", "cartMaxLine": "50", "referer": "", "entryPoint": "", "isSeller": "false", "csrf": "NjRjNGFiZjA4OTQ5ZDU2YjVjYzNkODcyODg4ZDE4MGVmNjQxNDgxNjU1Njk4NTM0YTNjMzgyOTc1ZDEyMGFlZllJM3ZzeUk4N2Y4cThjc0JyL0ZVbklCaVA1NFdiSENlYktQM1NkVEUrc0w2OWFybnNUSkhFc0R4QzVHNXRoWUJWQUxoYmJpQVhFQTlQQ3doZkt2YXZMeXhSdkFBZkFiZnlHR1ZmNUYwM2dLbTdZUXdSNTd1dEdZeUh5L1JDMjFmdGVnSUVBR3lMOUJ3amVrWU55YTFSQT09", "yjbfp_items": "ua\u0002Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\u0001lang\u0002zh-CN\u0001screen_height\u00021440\u0001screen_width\u00022560\u0001timezone_offset\u0002-480\u0001plugins\u0002Chrome PDF Plugin|Chrome PDF Viewer|Native Client\u0001canvas_image\u0002iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAACT0lEQVQ4T9WUP0hbURSHP6NV1Ka0JVAs1IiNf6igUkRwCA4uIi6iJIMQNzUZBLcQhIAIDg4uChrHEFARRINCQMgSUUFQQ6WkxjY0xhcSLOp7FlttUu4TK2IjYqfe6d7DPd8553d/72XxjytL5KfTs+nHcv4jQH8/LC7C/v7tYR88wugorK3B7OwjAddpPl+ESOSUnp5qNfSng74+CIdhefmmgjibzTAyApubEAiAwyERiym0t5fdBrjdYLHAxgbU119BBgfB6QRZFokwPw/RaIYRFAW0WrDZIhiN55hMlej10NICw8PnOBxhAoE3TE6eEYvJmEwVtzsQJ6sV/P4kVusBen0ZbW1PWV2Fy8sDPJ4kPl81ExNRIpETentr7gLW18Fo/IXdHkSSXuD3l7C3By7XDsGgFq+3lKkpIWIGQDoNlZXQ0PCZROKExsZazGYZr3efUMjAwoL2foDoSbz30JBMXV0Yp7OEo6NvHB6esbtbrYp4bwcCEI9DURF0dgbp6ChQBautfcXMzOuHAYRVDQYYG5NIpeKqUF1dVdjtufh8MD6eQQNRWRjF5YKdHQiFLnC7P6DTFVBcXIHNdvXMAwMZAFtb8P791aWlJaiqOsfj+Uh5uZ7m5peUlorqkEp9IRqV71r5ev68vAsk6ZTt7QTHxz/o7q4hkchCp0sTj8usrHwlJ0eDxfLurg9ERJLOmJv7hEYDra1v0eufqReTye9MT4fIzc2mqakYg+H53wEiqigX5OfnkJ2tfmvqEh5RlJ8UFj5Bo7mJ3+we+VP8DR//QTKrkbYiAAAAAElFTkSuQmCC", "dummy": "", "radCancelReason": "230" }];
             console.log("本地环境，直接返回。");
@@ -78,14 +90,17 @@
         if (orderCount == -1) {
             orderCount = link.length;
         }
-        if (link.length > 0) {
-            url = link.pop();
-            console.log("正在获取数据：第 " + (link.length + 1) + "/" + orderCount + " 个订单 ");
+        if (idx) {
+            var url = link[idx - 1];
             if (order_cache[url]) {
                 allInputValue = order_cache[url];
-                console.log(allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
-                getInfo();
+                console.log("获取 第 " + idx + "/" + orderCount + " 个订单," + allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
+                if (idx == link.length) {
+                    console.log("没有更多订单了");
+                    gotoShowData();
+                }
             } else {
+                loadCount++;
                 $.get(url, function (d) {
                     var body = $(d);
                     // "入金済み"
@@ -96,14 +111,43 @@
                         allInputValue[input.name] = input.value;
                     });
                     order_cache[url] = allInputValue;
-                    data.push(allInputValue);
-                    console.log(allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
-                    getInfo();
+                    // data.push(allInputValue);
+                    console.log("获取 第 " + idx + "/" + orderCount + " 个订单," + allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
+                    loadCount--;
+                    if (idx == link.length) {
+                        console.log("没有更多订单了");
+                        setTimeout(gotoShowData, 1000);
+                    }
                 });
             }
         } else {
-            console.log("没有更多订单了");
-            gotoShowData();
+            if (link.length > 0) {
+                var url = link.pop();
+                console.log("正在获取数据：第 " + (link.length + 1) + "/" + orderCount + " 个订单 ");
+                if (order_cache[url]) {
+                    allInputValue = order_cache[url];
+                    console.log(allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
+                    getInfo();
+                } else {
+                    $.get(url, function (d) {
+                        var body = $(d);
+                        // "入金済み"
+                        allInputValue = {};
+                        payInfo = body.find("#ordBasic").find("td:last").text().trim();
+                        allInputValue["payInfo"] = payInfo;
+                        body.find("input[name]").each((idx, input) => {
+                            allInputValue[input.name] = input.value;
+                        });
+                        order_cache[url] = allInputValue;
+                        // data.push(allInputValue);
+                        console.log(allInputValue.orderId + " 有 " + allInputValue.itemCount + " 个商品,信息获取完成 ");
+                        getInfo();
+                    });
+                }
+            } else {
+                console.log("没有更多订单了");
+                gotoShowData();
+            }
         }
     }
     sortByPayTime = function (a, b) {
@@ -205,8 +249,8 @@
     exportOption += "<tr><td style='text-align:center'><a href='javascript:showData()' style='font-size:50px;color:red;font-weight:bold;cursor:pointer' >生成数据</a>" +
         "&nbsp;&nbsp;<a href='javascript:location.reload()' style='font-size:20px;color:#000;font-weight:bold;cursor:pointer' >退出</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
         // "<a href='javascript:save2Excel()' id='downloadFile' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载表格</a>&nbsp;&nbsp;"+
-        "<a href='javascript:save2Excel1()' id='downloadFile1' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载发货表格</a>&nbsp;&nbsp;"+
-    "<a href='javascript:save2Excel2()' id='downloadFile2' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载采购表格</a></td></tr>";
+        "<a href='javascript:save2Excel1()' id='downloadFile1' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载发货表格</a>&nbsp;&nbsp;" +
+        "<a href='javascript:save2Excel2()' id='downloadFile2' style='font-size:30px;font-weight:bold;cursor:pointer;display:none;' >下载采购表格</a></td></tr>";
     exportOption += "<tr style='display:none'><td><div id=\"cMsg\" style=\"text-align:left;color:red;height:100px;width:100%;overflow-y:scroll\"></div></td></tr>";
     document.write("<table class=gridtable>" + exportOption + "</table><br/>");
 
@@ -235,7 +279,7 @@
             myItem.payActionTime = item.payActionTime;
             itemCount = parseInt(item.itemCount);
             if (itemCount > 1) {
-                for (var i = 1; i <= itemCount; i++) {
+                for (var j = 1; j <= itemCount; j++) {
                     var newMyItem = {};
                     newMyItem.orderId = myItem.orderId;
                     newMyItem.orderTime = myItem.orderTime;
@@ -246,11 +290,10 @@
                     newMyItem.totalPrice = myItem.totalPrice;
                     newMyItem.payInfo = myItem.payInfo;
                     newMyItem.payActionTime = myItem.payActionTime;
-
-                    newMyItem.itemName = item.title + i;
-                    newMyItem.itemId = item.itemId + i;
-                    newMyItem.quantity = item.quantity + i;
-                    newMyItem.unitPrice = item.unitPrice + i;
+                    newMyItem.itemName = item["title" + j];
+                    newMyItem.itemId = item["itemId" + j];
+                    newMyItem.quantity = item["quantity" + j];
+                    newMyItem.unitPrice = item["unitPrice" + j];
                     myData.push(newMyItem);
                 }
             } else {
@@ -297,19 +340,30 @@
         return ("<table border=\"1\"><tr>" + trs.join("</tr><tr>") + "</tr></table>");
     };
 
-    dataTableFH = "";
+
     gotoGetInfo = function () {
         for (var i = startPage; i <= endPage; i++) {
             page_link_cache["_" + i] && page_link_cache["_" + i].forEach(item => {
                 link.push(item);
             })
         }
-        console.log("所有页面获取完成,共有 " + link.length + " 个订单 ");
+
         data = [];
-        getInfo();
+        //递归，浏览器在网络慢时，会提示浏览器停止
+        // getInfo();
+        //不递归
+        for (var i = 0; i < link.length; i++) {
+            getInfo(i + 1);
+        }
+
     }
 
     gotoShowData = function () {
+        if (loadCount != 0) {
+            console.log("还有数据在获取中，再等1秒");
+            setTimeout(gotoShowData, 1000);
+            return;
+        }
         link.forEach(item => {
             data.push(order_cache[item]);
         })
@@ -480,24 +534,32 @@
             $("#downloadFile1").show();
             $("#downloadFile2").show();
         }
-        console.log = o_console_log;
+        // console.log = o_console_log;
     }
     showData = function (action) {
-        o_console_log = console.log;
-        cMsg = $("#cMsg");
-        cMsg.parents("tr").show();
-        cMsg = cMsg[0];
-        console.log = function (msg) {
-            o_console_log(msg);
-            cMsg.innerHTML = cMsg.innerHTML + "<br/>" + msg;
-            cMsg.scrollTop = cMsg.scrollHeight;
-        }
+        $("#orderTable").remove();
+        // o_console_log = console.log;
+        // cMsg = $("#cMsg");
+        // cMsg.parents("tr").show();
+        // cMsg = cMsg[0];
+        // console.log = function (msg) {
+        //     o_console_log(msg);
+        //     cMsg.innerHTML = cMsg.innerHTML + "<br/>" + msg;
+        //     cMsg.scrollTop = cMsg.scrollHeight;
+        // }
         startPage = parseInt(document.querySelector("#startPage").value);
         endPage = parseInt(document.querySelector("#endPage").value);
         link = [];
-        if (startPage <= endPage) {
-            getotherlink(startPage, endPage);
+        orderCount = -1;
+
+        //不递归，
+        for (var i = startPage; i <= endPage; i++) {
+            getotherlink(startPage, endPage, false);
         }
+        //递归做法，浏览器在网络慢时会提示停止
+        // if (startPage <= endPage) {
+        //     getotherlink(startPage, endPage,true);
+        // }
     }
 
     save2Excel = function () {
