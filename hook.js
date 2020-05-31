@@ -554,7 +554,7 @@
 
         //不递归，
         for (var i = startPage; i <= endPage; i++) {
-            getotherlink(startPage, endPage, false);
+            getotherlink(i, endPage, false);
         }
         //递归做法，浏览器在网络慢时会提示停止
         // if (startPage <= endPage) {
