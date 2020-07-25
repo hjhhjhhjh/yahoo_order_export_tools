@@ -158,7 +158,10 @@
         } else if (b.payActionTime != "") {
             return -1;
         } else {
-            return parseInt(a.orderId.split("-")[1]) - parseInt(b.orderId.split("-")[1]);
+            let items1 = a.orderId.split("-");
+            let items2 = b.orderId.split("-");
+
+            return parseInt(items1[items1.length-1]) - parseInt(items2[items2.length-1]);
         }
     }
 
@@ -312,7 +315,9 @@
             } else if (b.payActionTime != "") {
                 return -1;
             } else {
-                return parseInt(a.orderId.split("-")[1]) - parseInt(b.orderId.split("-")[1])
+                let items1 = a.orderId.split("-");
+                let items2 = b.orderId.split("-");
+                return parseInt(items1[items1.length-1]) - parseInt(items2[items2.length-1]);
             }
         })
 
@@ -405,8 +410,8 @@
                     obj[key].push(obj[key + "" + i]);
                 }
             })
-
-            shopName = obj.orderId.split("-")[0];
+            let items = obj.orderId.split("-");
+            shopName = items.slice(0,items.length-1).join("-").toLowerCase();
             obj.itemName = [];
             obj.firstImg = [];
 
