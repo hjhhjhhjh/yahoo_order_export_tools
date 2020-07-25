@@ -412,7 +412,7 @@
 
 
             for (var i = 1; i <= itemCount; i++) {
-                obj.firstImg.push("<img src=\"https://item-shopping.c.yimg.jp/i/d/" + shopName + "_" + obj["itemId" + i] + "\" width=106 height=106 />");
+                obj.firstImg.push("<img src=\"https://item-shopping.c.yimg.jp/i/l/" + shopName + "_" + obj["itemId" + i].toLowerCase() + "\" width=106 height=106 />");
                 obj.itemName.push("<a href=\"https://store.shopping.yahoo.co.jp/" + shopName + "/" + obj["itemId" + i] + ".html\" target=\"_blank\">" + obj["title" + i] + "</a>");
             }
 
