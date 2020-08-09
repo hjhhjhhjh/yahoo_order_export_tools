@@ -466,6 +466,7 @@
             var objDate=new Date();
             var thisDate =(objDate.getMonth()+1)+"-"+objDate.getDate();
             obj.myNowDate=thisDate;
+            obj.shipPhoneNumber="'"+obj.shipPhoneNumber
 
             // myFullShipAddress="氏名"+"<br />"
             //     +obj.shipLastName+obj.shipFirstName
