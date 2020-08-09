@@ -462,8 +462,8 @@
                 obj.firstImg.push("<img src=\"https://item-shopping.c.yimg.jp/i/l/" + shopName + "_" + obj["itemId" + i].toLowerCase() + "\" width=106 height=106 />");
                 //obj.itemName.push("<a href=\"https://store.shopping.yahoo.co.jp/" + shopName + "/" + obj["itemId" + i] + ".html\" target=\"_blank\">" + obj["title" + i] + "</a>");
                 obj.itemName.push(obj["title" + i]);
-
-                obj.myLinkUrl.push("https://store.shopping.yahoo.co.jp/" + shopName + "/" + obj["itemId" + i] + ".html");
+                var myShopUrl="https://store.shopping.yahoo.co.jp/" + shopName + "/" + obj["itemId" + i] + ".html";
+                obj.myLinkUrl.push("<a href=\""+myShopUrl+"\" target=\"_blank\">" + myShopUrl + "</a>");
             }
             var objDate=new Date();
             var thisDate =(objDate.getMonth()+1)+"-"+objDate.getDate();
@@ -486,7 +486,7 @@
             //     +"電話番号"
             //     +"<br />"
             //     +obj.shipPhoneNumber
-            myFullShipAddress="氏名 "
+            myFullShipAddress=""//"氏名 "
                 +obj.shipLastName+obj.shipFirstName
                 +"  "
                 +"郵便番号 "
